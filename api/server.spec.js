@@ -36,9 +36,28 @@ describe('server.js tests', () => {
         })
     });
     describe('POST /army/ endpoint', () => {
-        // should give a response of 201
-        // should return an id
-        // should return an error message/response 500 if unit does not have name or unitClass
+        it('should give a status code of 201 when sucessfully adding a new unit', async () => {
+            const newUnit = { name: 'Xander', unitClass: 'Paladin', uniqueWeapon: 'Siegfried' };
+
+            let response = await request(server).post('/army/').send(newUnit);
+
+            expect(response.status).toBe(201);
+        })
+  
+        it('should return an id upon successfully adding a new unit', async () => {
+            const newUnit = { name: 'Felicia', unitClass: 'Maid' };
+
+            let response = await request(server).post('/army/').send(newUnit);
+
+            expect(response.body).toEqual([5]);
+        })
+        
+        it('should return an error message when new unit does not have name or unitClass', async () => {
+            let response = await request(server).post('/army/');
+
+            expect(response.status).toBe(500);
+            expect(response.body).toEqual({ error: 'Unit needs a name and class to continue.' });
+        })
     });
     describe('DELETE /army/:id/ endpoint', () => {
         // should give a response of 200
