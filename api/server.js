@@ -34,4 +34,18 @@ server.post('/army', async (req, res) => {
     }
 });
 
+server.delete('/army/:id', async (req, res) => {
+    const { id } = req.params;
+    try {
+        const deleted = await db('army').where({ id: id }).first().del();
+        if (deleted){    
+            res.status(200).json(deleted);
+        } else {
+            res.status(404).json({ error: 'Unit not found.' });
+        }
+    } catch (err) {
+        res.status(500).json({ error: 'Could not delete unit. Try again.' });
+    }
+})
+
 module.exports = server;
