@@ -18,8 +18,22 @@ describe('server.js tests', () => {
         })
     });
     describe('GET /army/ endpoint', () => {
-        // should give response of 200 when sucessful
-        // should give an array of memebers
+        it('should return status code of 200 when successfully getting army units', async () => {
+            let response = await request(server).get('/army/');
+
+            expect(response.status).toBe(200);
+        })
+
+        it('should return an array of units in army', async () => {
+            const expected = [
+                { id: 1, name: 'Corrin', unitClass: 'Nohr Prince', uniqueWeapon: 'Yato' },
+                { id: 2, name: 'Azura', unitClass: 'Songstress', uniqueWeapon: null },
+                { id: 3, name: 'Ryoma', unitClass: 'Swordmaster', uniqueWeapon: 'Raijinto' },
+            ]
+            let response = await request(server).get('/army/');
+
+            expect(response.body).toEqual(expected);
+        })
     });
     describe('POST /army/ endpoint', () => {
         // should give a response of 201
