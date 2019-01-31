@@ -22,4 +22,16 @@ server.get('/army/', async (req, res) => {
     }
 });
 
+server.post('/army', async (req, res) => {
+    const { name, unitClass, uniqueWeapon } = req.body;
+    
+    try {
+        const success = await db('army').insert({name, unitClass, uniqueWeapon});
+
+        res.status(201).json(success);
+    } catch (err) {
+        res.status(500).json({ error: 'Unit needs a name and class to continue.' });
+    }
+});
+
 module.exports = server;
