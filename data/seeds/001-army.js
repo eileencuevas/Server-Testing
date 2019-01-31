@@ -6,7 +6,7 @@ exports.seed = function(knex, Promise) {
     .then(function () {
       // Inserts seed entries
       return knex('army').insert([
-        {name: 'Corrin', unitClass: 'Nohr Prince', uniqueWeapon: ''},
+        {name: 'Corrin', unitClass: 'Nohr Prince', uniqueWeapon: 'Yato'},
         {name: 'Azura', unitClass: 'Songstress', },
         {name: 'Ryoma', unitClass: 'Swordmaster', uniqueWeapon: 'Raijinto'}
       ]);
