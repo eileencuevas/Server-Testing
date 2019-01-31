@@ -1,8 +1,15 @@
 const request = require('supertest');
+const knex = require('knex');
+const knexConfig = require('../knexfile');
 
+const db = knex(knexConfig.development);
 const server = require('./server.js');
 
 describe('server.js tests', () => {
+    // afterEach(() => {
+    //     db.truncate();
+    // })
+
     describe('GET / endpoint', () => {
         it(`should return an object with 'Api working' when successful`, async () => {
             let response = await request(server).get('/');
@@ -44,7 +51,7 @@ describe('server.js tests', () => {
             expect(response.status).toBe(201);
         })
   
-        it('should return an id upon successfully adding a new unit', async () => {
+        it('should return an array of ids upon successfully adding a new unit', async () => {
             const newUnit = { name: 'Felicia', unitClass: 'Maid' };
 
             let response = await request(server).post('/army/').send(newUnit);
@@ -60,8 +67,23 @@ describe('server.js tests', () => {
         })
     });
     describe('DELETE /army/:id/ endpoint', () => {
-        // should give a response of 200
-        // should return an id
-        // should return an error message/response 404 if unit does not exist
+        it('should return a status code of 200 upon successful deletion', async () => {
+            response = await request(server).delete('/army/1');
+
+            expect(response.status).toBe(200);
+        })
+
+        it(`should return '1' upon successful deletion of those units`, async () => {
+            let response = await request(server).delete('/army/2');
+
+            expect(response.body).toEqual(1);
+        })
+        
+        it('should return an error message when unit does not exist', async () => {
+            let response = await request(server).delete('/army/10');
+
+            expect(response.status).toBe(404);
+            expect(response.body).toEqual({ error: 'Unit not found.' });
+        })
     });
 })
